@@ -11,25 +11,28 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
+    def __init__(self):
+        self.max_len = 0
+
     def longestUnivaluePath(self, root: TreeNode) -> int:
-        left = self.longestUnivaluePath1(root.left, 0)
-        right = self.longestUnivaluePath(root.right, 0)
-        return
-
-    def findLong(self, root: TreeNode, length: int) -> int:
-        if root is None:
-            return length
-        if root.left and root.val == root.left.val:
-            left_len = self.findLong(root.left, length+1)
-        else:
-            left_len = self.findLong(root.left, 0)
-
-        if root.right and root.val == root.right.val:
-            right_len = self.findLong(root.right, length+1)
-        else:
-            right_len = self.findLong(root.right, 0)
-        return left_len if left_len > right_len else right_len
-
+        def search(root: TreeNode):
+            if root is None:
+                return 0
+            left_depth = search(root.left)
+            right_depth = search(root.right)
+            if root.left and root.right and root.left.val == root.val == root.right.val:
+                self.max_len = max(self.max_len, left_depth + right_depth + 2)
+                return max(left_depth, right_depth) + 1
+            elif root.left and root.val == root.left.val:
+                self.max_len = max(self.max_len, left_depth + 1)
+                return left_depth + 1
+            elif root.right and root.val == root.right.val:
+                self.max_len = max(self.max_len, right_depth + 1)
+                return right_depth + 1
+            else:
+                return 0
+        search(root)
+        return self.max_len
 
 
 
