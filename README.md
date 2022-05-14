@@ -17,7 +17,7 @@
 二分查找 binary search 704/35/162/74  
 滑动窗口 sliding window（技巧） 209/1456  
 递归 recursion 509/206/344/687  
-分治 divide&conquer 169/53  
+分治 divide&conquer 169/53(应该是DP的题)  
 回溯 backtracking 22/78/77/46（全经典）  
 深度优先搜索DFS 938/78/200  
 宽度优先搜索BFS 200/547/721  
