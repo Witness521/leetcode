@@ -22,8 +22,6 @@ class Solution:
         backTracking(nums, 0, [])
         return self.result
 
-    def subsets2(self, nums: List[int]) -> List[List[int]]:
-
 
 if __name__ == '__main__':
     print(Solution().subsets(nums=[1,2,3]))
