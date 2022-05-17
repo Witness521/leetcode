@@ -22,8 +22,8 @@
 深度优先搜索DFS 938/78/200  
 宽度优先搜索BFS 200/547/721  
 并查集 union find 200/547/721  
-贪心 greedy 322/1217/55  
+贪心 greedy 1217/55  
 记忆化搜索（技巧）509/322  
-动态规划 dynamic programming 509/62/121/70/279/221  
+动态规划 dynamic programming 509/62/121/70/279/221/322  
 拓扑排序 topologic sort 207/210  
 前缀树 trie 208/720/692  
