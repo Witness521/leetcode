@@ -7,6 +7,7 @@
 
 合并账户后，按以下格式返回账户：每个账户的第一个元素是名称，其余元素是 按字符 ASCII 顺序排列 的邮箱地址。账户本身可以以 任意顺序 返回。
 '''
+import collections
 from typing import List
 
 class Union:
@@ -27,52 +28,38 @@ class Union:
 
 class Solution:
     def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
-        emailToIndex = {}
-        emailToName = {}
+        emailToIndex = dict()
+        emailToName = dict()
 
         for account in accounts:
             name = account[0]
-            for i in range(1, len(account)):
-                if account[i] not in emailToIndex:
-                    emailToIndex[account[i]] = len(emailToIndex)
-                    emailToName[name] = name
+            for email in account[1:]:
+                if email not in emailToIndex:
+                    emailToIndex[email] = len(emailToIndex)
+                    emailToName[email] = name
+        # 初始化Union
+        uf = Union(len(emailToIndex))
+        # 将一个account里的邮箱使用union函数进行整合(一个account里面的内容属于一个并查集合)
+        for account in accounts:
+            firstIndex = emailToIndex[account[1]]
+            for email in account[2:]:
+                uf.union(firstIndex, emailToIndex[email])
 
-    def accountsMerge(self, accounts):
-        from collections import defaultdict
+        # 设置一个根据ID找Emails的字典，将一个集合内的元素合并到父节点的集合中
+        indexToEmails = collections.defaultdict(list)
+        for email, index in emailToIndex.items():
+            # 查找该index的父节点
+            index = uf.find(index)
+            # 将该email放入父节点的集合
+            indexToEmails[index].append(email)
 
-        f = {}
-
-        def find(x):
-            f.setdefault(x, x)
-            while f[x] != x:
-                #x = f[x]
-                f[x] = f[f[x]]
-                x = f[x]
-            return x
-
-        def union(x, y):
-            f[find(x)] = find(y)
-
-        lookup = {}
-        n = len(accounts)
-        for idx, account in enumerate(accounts):
-            name = account[0]
-            email = account[1:]
-            for e in email:
-                if e in lookup:
-                    union(idx, lookup[e])
-                else:
-                    lookup[e] = idx
-        # print(f)
-        disjointSet = defaultdict(set)
-        for i in range(n):
-            tmp = find(i)
-            for es in accounts[i][1:]:
-                disjointSet[tmp].add(es)
-        # print(disjointSet)
-        res = []
-        for key, val in disjointSet.items():
-            res.append([accounts[key][0]] + list(sorted(val)))
-        return res
+        ans = list()
+        for emails in indexToEmails.values():
+            # 添加上姓名并将邮箱进行升序排列
+            ans.append([emailToName[emails[0]]] + sorted(emails))
+        return ans
 
 
+if __name__ == '__main__':
+    print(Solution().accountsMerge(accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
+))
