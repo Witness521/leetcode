@@ -27,3 +27,6 @@
 动态规划 dynamic programming 509/62/121/70/279/221/322  
 拓扑排序 topologic sort 207/210  
 前缀树 trie 208/720/692  
+
+**2022.5.26完成**
+接下来刷leetcode hot100题
