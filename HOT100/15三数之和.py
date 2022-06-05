@@ -3,7 +3,8 @@
 
 注意：答案中不可以包含重复的三元组。
 '''
-import collections
+# 第一次没想出来
+
 from typing import List
 
 
