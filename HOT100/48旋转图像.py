@@ -24,6 +24,6 @@ class Solution:
 
         return matrix
 
+
 if __name__ == '__main__':
     print(Solution().rotate([[1]]))
-
