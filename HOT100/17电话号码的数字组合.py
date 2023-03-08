@@ -9,11 +9,33 @@ from typing import List
 
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
+        # if digits == "":
+        #     return []
+        # phone_dict = {
+        #     '2': 'abc',
+        #     '3': 'def',
+        #     "4": "ghi",
+        #     "5": "jkl",
+        #     "6": "mno",
+        #     "7": "pqrs",
+        #     "8": "tuv",
+        #     "9": "wxyz",
+        # }
+        #
+        # total_result = []
+        # def dfs(i, result: str):
+        #     if i >= len(digits):
+        #         total_result.append(result)
+        #         return
+        #     for ch in phone_dict[digits[i]]:
+        #         dfs(i+1, result + ch)
+        # dfs(0, '')
+        # return total_result
         if digits == "":
-            return []
-        phone_dict = {
-            '2': 'abc',
-            '3': 'def',
+            return None
+        hashmap = {
+            "2": "abc",
+            "3": "def",
             "4": "ghi",
             "5": "jkl",
             "6": "mno",
@@ -21,17 +43,19 @@ class Solution:
             "8": "tuv",
             "9": "wxyz",
         }
-
-        total_result = []
-        def dfs(i, result: str):
-            if i >= len(digits):
-                total_result.append(result)
+        result_list = []
+        def dfs(digits: str, result: str, i: int):
+            if i == len(digits):
+                result_list.append(result)
                 return
-            for ch in phone_dict[digits[i]]:
-                dfs(i+1, result + ch)
-        dfs(0, '')
-        return total_result
+            for c in hashmap[digits[i]]:
+                dfs(digits, result + c, i + 1)
+        dfs(digits, '', 0)
+        return result_list
+
+
+
 
 if __name__ == '__main__':
-    print(Solution().letterCombinations(""))
+    print(Solution().letterCombinations("23"))
 

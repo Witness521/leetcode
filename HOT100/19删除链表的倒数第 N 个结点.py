@@ -27,19 +27,37 @@ class Solution:
         # return head
 
         # 2. 使用栈的方法
-        dummy = ListNode(0, head)
-        head_pointer = dummy
+        # dummy = ListNode(0, head)
+        # head_pointer = dummy
+        # stack = []
+        # while head_pointer:
+        #     stack.append(head_pointer)
+        #     head_pointer = head_pointer.next
+        # for i in range(n):
+        #     stack.pop()
+        # # 待删除元素的左元素
+        # element_left = stack.pop()
+        # head_pointer = dummy
+        # while head_pointer != element_left:
+        #     head_pointer = head_pointer.next
+        # head_pointer.next = head_pointer.next.next
+        # return dummy.next
+        dummy = ListNode(next=head)
         stack = []
-        while head_pointer:
-            stack.append(head_pointer)
-            head_pointer = head_pointer.next
-        for i in range(n):
-            stack.pop()
-        # 待删除元素的左元素
-        element_left = stack.pop()
-        head_pointer = dummy
-        while head_pointer != element_left:
-            head_pointer = head_pointer.next
-        head_pointer.next = head_pointer.next.next
+        rear = None
+        pointer = dummy
+        while pointer:
+            stack.append(pointer)
+            pointer = pointer.next
+        if len(stack) == 2:
+            return None
+        for i in range(n-1):  # 删除后n-1个节点
+            rear = stack.pop()
+        stack.pop()
+        front = stack.pop()
+        front.next = rear
         return dummy.next
 
+if __name__ == '__main__':
+    for i in range(-1):
+        print(i)
