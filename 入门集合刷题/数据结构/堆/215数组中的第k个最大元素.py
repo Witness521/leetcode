@@ -8,6 +8,43 @@ from typing import List
 
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
+        '''
+            通过删除k次堆顶元素，第k次获得的就是第k大的元素
+        '''
+        heapSize = len(nums)
+        self.build_minHeap(nums, k)
+        for i in range(k, heapSize):
+            # 如果待添加的元素大于堆顶元素则将其入堆
+            if nums[i] > nums[0]:
+                nums[0], nums[i] = nums[i], nums[0]
+                # 只需要将堆顶重新进行调整即可
+                self.adjust_minHeap(nums, k, 0)
+
+        return nums[0]
+
+    def build_minHeap(self, nums: List[int], k: int):
+        # 从最后一个非叶子节点开始进行建大根堆
+        for i in range(k // 2 - 1, -1, -1):
+            self.adjust_minHeap(nums, k, i)
+
+    # 使用前k个元素建立小根堆
+    def adjust_minHeap(self, nums: List[int], k: int, i: int):
+        min_pos = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        if left < k and nums[min_pos] > nums[left]:
+            min_pos = left
+        if right < k and nums[min_pos] > nums[right]:
+            min_pos = right
+        if i != min_pos:
+            nums[i], nums[min_pos] = nums[min_pos], nums[i]
+            self.adjust_minHeap(nums, k, min_pos)
+
+'''
+    大根堆 目前Leetcode最后一组测试数据超时
+'''
+class Solution2:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
         for i in range(k):
             self.build_maxheap(nums)
             result = nums.pop(0)

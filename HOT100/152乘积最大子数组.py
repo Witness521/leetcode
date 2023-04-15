@@ -16,22 +16,20 @@ class Solution:
         #             max_res = matrix[i][j]
         # return max_res
 
+        # 不满足最优子结构 因为出现负数的时候负数小于正数，但又无法判断后面是否还有负数
         '''
-            维护两个最大值和最小值数组
-            最大值只会出现在最大的f*ai或者是最小的f*ai
+            分情况进行讨论
+            1. 如果第i个位置的数是正数的话 那么希望其前一个位置结尾的某个段的积也是正数 并尽可能大
+            2. 如果第i个位置的数是负数的话 那么希望其前一个位置结尾的某个段的积也是负数 并尽可能小
+            fmax(i) = max{a_i * fmax(i-1), a_i * f_min(i-1), a_i}
+            fmin(i) = min{a_i * fmax(i-1), a_i * f_min(i-1), a_i}
         '''
-
-        fmax = [-9999] * len(nums)
-        fmin = [9999] * len(nums)
-        fmax[0] = nums[0]
-        fmin[0] = nums[0]
+        fmax = [nums[0]] * len(nums)
+        fmin = [nums[0]] * len(nums)
         for i in range(1, len(nums)):
-            # dp递推式
-            fmax[i] = max(fmax[i-1] * nums[i], fmin[i-1] * nums[i], nums[i])
-            fmin[i] = min(fmax[i-1] * nums[i], fmin[i-1] * nums[i], nums[i])
-        return max(max(fmax), max(fmin))
-
-
+            fmax[i] = max(nums[i] * fmax[i-1], nums[i] * fmin[i-1], nums[i])
+            fmin[i] = min(nums[i] * fmax[i-1], nums[i] * fmin[i-1], nums[i])
+        return max(fmax)
 
 if __name__ == '__main__':
     print(Solution().maxProduct([2,3,-2,4]))
