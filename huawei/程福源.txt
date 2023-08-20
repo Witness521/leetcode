@@ -1,0 +1,134 @@
+题目一：将一个正整数，表示为若干个质数的乘积，返回所有质数的列表。
+例如：
+输入20，返回：2，2，5
+
+一、解题思路：
+从最小的质数开始逐个尝试能否被给定的正整数n整除，边界条件是质数的平方要小于等于正整数n
+对于每个尝试的质数，判断是否能被给定的正整数n整除：
+	1. 如果可以整除，将该质数添加到列表中，并将给定的正整数更新为除以该质数的商。
+	2. 如果不能整除，尝试下一个质数。
+还需要判断正整数n是否大于 1，若大于 1 则说明该正整数本身也是质数，将其添加到列表中。
+最终将列表返回
+
+二、代码：
+class Solution:
+    def prime_factors(self, n):
+        factors = []        # 用来存储所有的质数
+        i = 2               # 从最小的质数开始判断
+        while i * i <= n:   # 边界条件
+            if n % i:
+                i += 1      # 如果n不能整除i 则i+1
+            else:
+                n = n // i  # 如果n能整除i 则i是n的质因数 将其存储到factor中(//的原因: 让n//i后得到的结果是int类型)
+                factors.append(i)
+
+        if n > 1:           # 如果n的值大于1 说明目前n也是一个质因数 将其添加到factor中
+            factors.append(n)
+        return factors
+
+if __name__ == '__main__':
+    print(Solution().prime_factors(20))  # [2, 2, 5]
+	
+三、时间复杂度：
+O(log(n)) 其中，n是给定的正整数
+分析：程序中耗时的部分都集中在while循环中，一般情况下，整数n在循环的过程中除以i会逐渐变小，
+整除的次数不会超过 log(n)。因此，整个代码的时间复杂度为 O(log(n))。
+在最坏的情况下，给定的n是一个质数，循环就需要执行sqrt(n)次，
+
+
+
+题目二：给定一个点P(xp, yp)与一个三角形的三个顶点A(x1, y1), B(x2, y2), C(x3, y3)，返回该点是否在三角形内部。
+例如：
+点P为（1，1），A, B, C分别为（0，0），（0，2），（2，0），返回值为True
+
+一、解题思路：
+根据给定的坐标A,B,C我们可以根据行列式的公式AREA = 1/2 * |(x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)|求得三角形ABC的面积。
+并且给定的点P也和A,B,C围成了三个子三角形PAB PAC PBC，我们使用公式计算出这个三个子三角形的面积
+如果这三个子三角形的面积之和等于三角形ABC的面积，则点P在三角形ABC的内部；否则，点P不在三角形ABC的内部。
+
+二、代码：
+class Solution:
+    def is_point_in_triangle(self, xp, yp, x1, y1, x2, y2, x3, y3):
+        def cal_area(x1, y1, x2, y2, x3, y3):           # 使用行列式计算三角形的面积
+            return 0.5 * abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1))
+
+        area_ABC = cal_area(x1, y1, x2, y2, x3, y3)     # 计算三角形ABC的面积
+
+        area_PAB = cal_area(xp, yp, x1, y1, x2, y2)     # 计算子三角形PAB的面积
+        area_PAC = cal_area(xp, yp, x1, y1, x3, y3)     # 计算子三角形PAC的面积
+        area_PBC = cal_area(xp, yp, x2, y2, x3, y3)     # 计算子三角形PBC的面积
+        if area_ABC == area_PAB + area_PAC + area_PBC:  # 如果三个子三角形的面积之和等于三角形ABC的面积
+            return True                                 # 在ABC的内部
+        else:
+            return False                                # 不在ABC的内部
+
+if __name__ == '__main__':
+    xp, yp = 1, 1
+    x1, y1 = 0, 0
+    x2, y2 = 0, 2
+    x3, y3 = 2, 0
+    print(Solution().is_point_in_triangle(xp, yp, x1, y1, x2, y2, x3, y3))  # True
+
+三、时间复杂度：
+O(1)
+分析：在本程序中，没有使用递归和循环，只是固定数量的操作，因此时间复杂度为常数时间复杂度。
+
+
+
+题目三：针对给定的图片，写一个算法找出其中非连通的独立白色区域的个数。注意，只有当两个区域没有任何点相连
+时才是独立区域。其中，图片1有2个联通区域，图片2有16个联通区域。测试时请使用给定的图片。
+
+一、解题思路：
+此题是一道求解连通区域的题目，与力扣200题岛屿数量思想很类似，题目的区别在于本题求解的是图像中的区域个数。
+用例所给的图像大小分别是312×512和500×500，若在如此大的空间上完成深度优先搜索计算量会非常的大，所以在本题
+中我们考虑先对图片进行缩小，选取的比例因子为0.3，即将图像缩小为原来的0.3倍。
+具体算法：
+对图像进行遍历，对于每个白色像素且未访问过的像素，执行以下步骤：
+使用深度优先搜索算法，从当前像素开始遍历八个方向上所有相连的白色像素，并将它们标记为已访问。
+将count值加1，表示发现了一个独立区域。
+返回count值，即独立区域的个数。
+
+二、代码：
+import cv2
+class Solution:
+    def find_independent_region(self, image_path):
+        # 以灰度图的形式读取图像
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        # 记录图像的高和宽
+        height, width = image.shape
+        # 对图像进行缩小
+        width = int(width * 0.3)
+        height = int(height * 0.3)
+        # 缩小图像
+        image = cv2.resize(image, (width, height))
+        # 记录联通区域的个数
+        count = 0
+        # 存储已访问过的节点
+        visited = set()
+        for x in range(height):
+            for y in range(width):
+                # 如果点(x, y)在白色区域并且未被访问过 则进行深度优先搜索
+                if image[x, y] > 0 and (x, y) not in visited:
+                    self.dfs(image, visited, x, y)
+                    # 联通区域+1
+                    count += 1
+        return count
+
+    # 使用深度优先搜索的方法
+    def dfs(self, image, visited, x, y):
+        # 对当前像素标记已访问
+        visited.add((x, y))
+        # 遍历当前像素的8个邻接点
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                nx, ny = x + dx, y + dy
+                # 若(nx,ny)在图像的白色区域内，并且点(nx, ny)没有被访问过 则进行深度优先搜索
+                if 0 <= nx < image.shape[0] and 0 <= ny < image.shape[1] and (nx, ny) not in visited and image[nx, ny] > 0:
+                    self.dfs(image, visited, nx, ny)
+
+if __name__ == '__main__':
+    print(Solution().find_independent_region('Q3_img1.png'))    # 2
+    # print(Solution().find_independent_region('Q3_img2.png'))  # 16
+	
+三、时间复杂度：
+O(MN)，其中M和N分别为resize后图像的行数和列数。
