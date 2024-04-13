@@ -30,3 +30,34 @@ class Solution:
                     dp[i][j] = min(dp[i][j - 1] + 1, dp[i - 1][j] + 1, dp[i - 1][j - 1] + 1)
         # 递推结束
         return dp[rows - 1][cols - 1]
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+    递归方法
+'''
+def minDistance(word1: str, word2: str) -> int:
+    # 如果word1的长度为0 返回word2的长度 反之同理
+    if len(word1) == 0 or len(word2) == 0:
+        return max(len(word1), len(word2))
+    if word1[-1] == word2[-1]:
+        return minDistance(word1[:-1], word2[:-1])
+    return min(minDistance(word1[:-1], word2), minDistance(word1, word2[:-1]), minDistance(word1[:-1], word2[:-1])) + 1
+
+
+if __name__ == '__main__':
+    print(minDistance("horse", "ros"))

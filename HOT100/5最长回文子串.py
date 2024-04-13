@@ -81,4 +81,4 @@ class Solution:
 
 
 if __name__ == '__main__':
-    print(Solution().longestPalindrome('aa'))
+    print(Solution().longestPalindrome('aacabdkacaa'))
