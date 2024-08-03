@@ -61,9 +61,8 @@
 
 
 def find(x, f):
-    if f[x] == x:
-        return x
-    f[x] = find(f[x], f)
+    if f[x] != x:
+        f[x] = find(f[x], f)
     return f[x]
 
 def merge(x, y, g, f, v):
@@ -77,7 +76,7 @@ def merge(x, y, g, f, v):
 
 n = int(input())
 a = []
-f = [i for i in range(n)]
+f = [i for i in range(n)]  # 表示并查集中的父节点
 v = [0] * n
 
 for i in range(n):
@@ -87,7 +86,6 @@ for i in range(n):
         if row[j] > 0:
             merge(i, j, row[j], f, v)
 
-print(v)
 res = []
 for i in range(n):
     if f[i] == i:
