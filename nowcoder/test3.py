@@ -99,6 +99,7 @@ class Solution:
             if fast:
                 fast = fast.next
         backNodes = slow.next  # 后续需要反转的链表
+        slow.next = None  # 需要断开 (忘记!!!)
         reverseHead = self.reverse(backNodes)
         p1 = head  # 指针指向头
         while reverseHead:
@@ -112,8 +113,20 @@ class Solution:
             # 更新reverseHead  (忘记了)
             reverseHead = p2
 
+
+
 if __name__ == '__main__':
-    LinkedNode(val=0)
+    node5 = LinkedNode(val=5)
+    node4 = LinkedNode(val=4, next=node5)
+    node3 = LinkedNode(val=3, next=node4)
+    node2 = LinkedNode(val=2, next=node3)
+    node1 = LinkedNode(val=1, next=node2)
+
+    Solution().reorderList(node1)
+
+    while node1:
+        print(node1.val)
+        node1 = node1.next
 
 
 
@@ -170,5 +183,3 @@ if __name__ == '__main__':
 #     // 业务代码
 # 	time.Sleep(3 * time.Second)
 # }
-
-if __name__ == '__main__':
