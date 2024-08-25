@@ -25,3 +25,6 @@ if __name__ == '__main__':
     nums = [2, 1, 5, 2, 0, 9, 1]
     quickSort(nums, 0, len(nums) - 1)
     print(nums)
+
+    a = 'a'
+    print(ord(a))
